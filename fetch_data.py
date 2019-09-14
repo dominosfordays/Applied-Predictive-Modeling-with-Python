@@ -18,8 +18,8 @@ pandas2ri.activate()
 from rpy2.robjects import r
 
 APM_URL = ('http://cran.r-project.org/src/contrib/'
-            'AppliedPredictiveModeling_1.1-6.tar.gz')
-APM_ARCHIVE = 'AppliedPredictiveModeling_1.1-6.tar.gz'
+            'AppliedPredictiveModeling_1.1-7.tar.gz')
+APM_ARCHIVE = 'AppliedPredictiveModeling_1.1-7.tar.gz'
 APM_NAME = 'AppliedPredictiveModeling'
 
 CRT_URL = ('https://cran.r-project.org/src/contrib/Archive/caret/caret_6.0-37.tar.gz')
