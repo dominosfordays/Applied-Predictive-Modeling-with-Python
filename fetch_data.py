@@ -46,7 +46,7 @@ def download_pack(datasets_folder):
     opener = urlopen(APM_URL)
     open(archive_path, 'wb').write(opener.read())
 
-    print "Decomposing %s" % archive_path
+    print( "Decomposing %s" % archive_path)
 
     tarfile.open(archive_path, "r:gz").extractall(path=datasets_folder)
 
