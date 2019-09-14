@@ -38,7 +38,7 @@ def mkdir_dataset():
 def download_pack(datasets_folder):
     '''download R package from CRAN'''
     # download APM
-    print "Downloading AppliedPredictiveModeling from %s (2 MB)" % APM_URL
+    print( "Downloading AppliedPredictiveModeling from %s (2 MB)") % APM_URL
 
     archive_path = os.path.join(datasets_folder, APM_ARCHIVE)
     file_path = os.path.join(datasets_folder, APM_NAME)
