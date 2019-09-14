@@ -11,7 +11,11 @@ import tarfile
 import shutil
 import pandas as pd
 import rpy2.robjects as robjects
-import pandas.rpy.common as com
+#import rpy2.situation as robjects
+#import pandas.rpy.common as com
+from rpy2.robjects import pandas2ri
+pandas2ri.activate()
+from rpy2.robjects import r
 
 APM_URL = ('http://cran.r-project.org/src/contrib/'
             'AppliedPredictiveModeling_1.1-6.tar.gz')
@@ -38,7 +42,7 @@ def mkdir_dataset():
 def download_pack(datasets_folder):
     '''download R package from CRAN'''
     # download APM
-    print( "Downloading AppliedPredictiveModeling from %s (2 MB)") % APM_URL
+    print( f"Downloading AppliedPredictiveModeling from {APM_URL} (2 MB)")
 
     archive_path = os.path.join(datasets_folder, APM_ARCHIVE)
     file_path = os.path.join(datasets_folder, APM_NAME)
@@ -46,7 +50,7 @@ def download_pack(datasets_folder):
     opener = urlopen(APM_URL)
     open(archive_path, 'wb').write(opener.read())
 
-    print( "Decomposing %s" % archive_path)
+    print( f"Decomposing {archive_path}")
 
     tarfile.open(archive_path, "r:gz").extractall(path=datasets_folder)
 
@@ -56,7 +60,7 @@ def download_pack(datasets_folder):
     os.remove(archive_path)
 
     # download Caret
-    print( "Downloading Caret from %s (2 MB)" % CRT_URL)
+    print( f"Downloading Caret from {CRT_URL} (2 MB)")
 
     archive_path = os.path.join(datasets_folder, CRT_ARCHIVE)
     file_path = os.path.join(datasets_folder, CRT_NAME)
@@ -64,7 +68,7 @@ def download_pack(datasets_folder):
     opener = urlopen(CRT_URL)
     open(archive_path, 'wb').write(opener.read())
 
-    print( "Decomposing %s" % archive_path)
+    print( f"Decomposing {archive_path}")
 
     tarfile.open(archive_path, "r:gz").extractall(path=datasets_folder)
 
@@ -137,7 +141,8 @@ def convert_datafiles(datasets_folder):
                 robj = robjects.r.load(file_path)
                 # check out subfiles in the data frame
                 for var in robj:
-                    myRData = com.load_data(var)
+                    r.data(var)
+                    myRData = pandas2ri.ri2py(r[name])
                     # convert to DataFrame
                     if not isinstance(myRData, pd.DataFrame):
                         myRData = pd.DataFrame(myRData)
