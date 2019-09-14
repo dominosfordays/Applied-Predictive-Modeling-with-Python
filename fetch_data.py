@@ -6,7 +6,7 @@ from CRAN and converts .RData files to .csv files.
 '''
 
 import os
-from urllib import urlopen
+from urllib.request import urlopen
 import tarfile
 import shutil
 import pandas as pd
