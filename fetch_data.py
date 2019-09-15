@@ -147,7 +147,7 @@ def convert_datafiles(datasets_folder):
                 # check out subfiles in the data frame
                 for var in robj:
                     with localconverter(robjects.default_converter + pandas2ri.converter):
-                        myRData=robjects.conversion.rpy2py(robjects.r['solTestX'])
+                        myRData=robjects.conversion.rpy2py(robjects.r[var])
                     # convert to DataFrame
                     if not isinstance(myRData, pd.DataFrame):
                         myRData = pd.DataFrame(myRData)
