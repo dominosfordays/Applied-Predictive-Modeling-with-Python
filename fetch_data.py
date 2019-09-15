@@ -15,7 +15,8 @@ import rpy2.robjects as robjects
 #import pandas.rpy.common as com
 from rpy2.robjects import pandas2ri
 pandas2ri.activate()
-from rpy2.robjects import r
+from rpy2.robjects.packages import importr
+from rpy2.robjects.conversion import localconverter
 
 APM_URL = ('http://cran.r-project.org/src/contrib/'
             'AppliedPredictiveModeling_1.1-7.tar.gz')
@@ -130,26 +131,29 @@ def convert_datafiles(datasets_folder):
 
     for root, dirs, files in os.walk(datasets_folder):
         for name in files:
+            print(name)
             # sort out .RData files
             if name.endswith('.RData'):
                 name_ = os.path.splitext(name)[0]
+                print(name_)
                 name_path = os.path.join(datasets_folder, name_)
+                print(name_path)
                 # creat sub-directory
                 if not os.path.exists(name_path):
                     os.makedirs(name_path)
                 file_path = os.path.join(root, name)
-                robj = robjects.r.load(file_path)
+                robj = robjects.r['load'](file_path)
+
                 # check out subfiles in the data frame
                 for var in robj:
-                    r.data(var)
-                    myRData = pandas2ri.ri2py(r[name])
+                    with localconverter(robjects.default_converter + pandas2ri.converter):
+                        myRData=robjects.conversion.rpy2py(robjects.r['solTestX'])
                     # convert to DataFrame
                     if not isinstance(myRData, pd.DataFrame):
                         myRData = pd.DataFrame(myRData)
                     var_path = os.path.join(datasets_folder,name_,var+'.csv')
                     myRData.to_csv(var_path)
                 os.remove(os.path.join(datasets_folder, name)) # clean up
-
     print( "=> Success!")
 
 if __name__ == "__main__":
